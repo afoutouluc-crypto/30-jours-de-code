@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <string.h>
+
+// Jour 08 - Manipulation de chaînes en C
+// Niveau L2 - Programmation C
+
+// Inverser une chaîne
+void inverser(char *str) {
+    int n = strlen(str);
+    for (int i = 0; i < n / 2; i++) {
+        char tmp = str[i];
+        str[i] = str[n - 1 - i];
+        str[n - 1 - i] = tmp;
+    }
+}
+
+// Vérifier si une chaîne est un palindrome
+int est_palindrome(char *str) {
+    int n = strlen(str);
+    for (int i = 0; i < n / 2; i++) {
+        if (str[i] != str[n - 1 - i]) return 0;
+    }
+    return 1;
+}
+
+// Compter les occurrences d'un caractère
+int compter_char(char *str, char c) {
+    int count = 0;
+    for (int i = 0; str[i] != '\0'; i++)
+        if (str[i] == c) count++;
+    return count;
+}
+
+int main() {
+    char mot[] = "radar";
+    printf("Mot : %s\n", mot);
+    printf("Palindrome ? %s\n", est_palindrome(mot) ? "Oui" : "Non");
+
+    char phrase[] = "bonjour";
+    inverser(phrase);
+    printf("Inverse de 'bonjour' : %s\n", phrase);
+
+    printf("Occurrences de 'o' dans 'bonjour' : %d\n", compter_char("bonjour", 'o'));
+    return 0;
+}
