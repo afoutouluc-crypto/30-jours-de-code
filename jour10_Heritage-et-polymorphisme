@@ -1,0 +1,58 @@
+// Jour 10 - Héritage et Polymorphisme
+// Niveau L2 - Programmation Orientée Objet
+
+abstract class Animal {
+    protected String nom;
+    protected int age;
+
+    public Animal(String nom, int age) {
+        this.nom = nom;
+        this.age = age;
+    }
+
+    public abstract String parler();
+
+    public String toString() {
+        return nom + " (" + age + " ans) dit : " + parler();
+    }
+}
+
+class Chien extends Animal {
+    public Chien(String nom, int age) { super(nom, age); }
+
+    @Override
+    public String parler() { return "Wouf !"; }
+}
+
+class Chat extends Animal {
+    public Chat(String nom, int age) { super(nom, age); }
+
+    @Override
+    public String parler() { return "Miaou !"; }
+}
+
+class Perroquet extends Animal {
+    private String phrase;
+
+    public Perroquet(String nom, int age, String phrase) {
+        super(nom, age);
+        this.phrase = phrase;
+    }
+
+    @Override
+    public String parler() { return phrase; }
+}
+
+public class Polymorphisme {
+    public static void main(String[] args) {
+        Animal[] animaux = {
+            new Chien("Rex", 3),
+            new Chat("Mimi", 5),
+            new Perroquet("Coco", 2, "Bonjour ! Je veux des graines !")
+        };
+
+        for (Animal a : animaux) {
+            System.out.println(a);
+        }
+    }
+}
