@@ -1,0 +1,56 @@
+// Jour 13 - Arbre binaire de recherche (BST)
+// Niveau L2 - Structures de données
+
+public class ArbreBinaire {
+
+    static class Noeud {
+        int valeur;
+        Noeud gauche, droite;
+        Noeud(int v) { valeur = v; }
+    }
+
+    Noeud racine;
+
+    public void inserer(int valeur) {
+        racine = insererRec(racine, valeur);
+    }
+
+    private Noeud insererRec(Noeud noeud, int valeur) {
+        if (noeud == null) return new Noeud(valeur);
+        if (valeur < noeud.valeur) noeud.gauche = insererRec(noeud.gauche, valeur);
+        else if (valeur > noeud.valeur) noeud.droite = insererRec(noeud.droite, valeur);
+        return noeud;
+    }
+
+    public boolean rechercher(int valeur) {
+        return rechercherRec(racine, valeur);
+    }
+
+    private boolean rechercherRec(Noeud noeud, int valeur) {
+        if (noeud == null) return false;
+        if (valeur == noeud.valeur) return true;
+        return valeur < noeud.valeur
+            ? rechercherRec(noeud.gauche, valeur)
+            : rechercherRec(noeud.droite, valeur);
+    }
+
+    // Parcours infixe (donne les valeurs triées)
+    public void infixe(Noeud noeud) {
+        if (noeud == null) return;
+        infixe(noeud.gauche);
+        System.out.print(noeud.valeur + " ");
+        infixe(noeud.droite);
+    }
+
+    public static void main(String[] args) {
+        ArbreBinaire arbre = new ArbreBinaire();
+        int[] valeurs = {50, 30, 70, 20, 40, 60, 80};
+        for (int v : valeurs) arbre.inserer(v);
+
+        System.out.print("Parcours infixe (trié) : ");
+        arbre.infixe(arbre.racine);
+        System.out.println();
+        System.out.println("Recherche 40 : " + arbre.rechercher(40));
+        System.out.println("Recherche 99 : " + arbre.rechercher(99));
+    }
+}
