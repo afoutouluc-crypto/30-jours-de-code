@@ -1,0 +1,61 @@
+-- Jour 14 - SQL : E-commerce simplifié
+-- Niveau L2 - SQL (transactions, triggers conceptuels)
+
+CREATE TABLE Client (
+    id_client INTEGER PRIMARY KEY,
+    nom VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    solde DECIMAL(10,2) DEFAULT 0
+);
+
+CREATE TABLE Produit (
+    id_produit INTEGER PRIMARY KEY,
+    nom VARCHAR(100),
+    prix DECIMAL(10,2),
+    stock INTEGER
+);
+
+CREATE TABLE Commande (
+    id_commande INTEGER PRIMARY KEY,
+    id_client INTEGER,
+    date_commande DATE,
+    total DECIMAL(10,2),
+    FOREIGN KEY (id_client) REFERENCES Client(id_client)
+);
+
+CREATE TABLE LigneCommande (
+    id_ligne INTEGER PRIMARY KEY,
+    id_commande INTEGER,
+    id_produit INTEGER,
+    quantite INTEGER,
+    prix_unitaire DECIMAL(10,2),
+    FOREIGN KEY (id_commande) REFERENCES Commande(id_commande),
+    FOREIGN KEY (id_produit) REFERENCES Produit(id_produit)
+);
+
+-- Données
+INSERT INTO Client VALUES (1, 'Alice', 'alice@mail.com', 500.00);
+INSERT INTO Produit VALUES (1, 'Clavier mécanique', 89.99, 15);
+INSERT INTO Produit VALUES (2, 'Souris gaming', 49.99, 30);
+INSERT INTO Produit VALUES (3, 'Écran 27"', 299.99, 5);
+
+INSERT INTO Commande VALUES (1, 1, '2024-02-01', 189.97);
+INSERT INTO LigneCommande VALUES (1, 1, 1, 1, 89.99);
+INSERT INTO LigneCommande VALUES (2, 1, 2, 2, 49.99);
+
+-- Requêtes utiles
+-- Total dépensé par client
+SELECT c.nom, SUM(cmd.total) AS total_depense
+FROM Client c
+JOIN Commande cmd ON c.id_client = cmd.id_client
+GROUP BY c.nom;
+
+-- Produits les plus vendus
+SELECT p.nom, SUM(lc.quantite) AS total_vendu
+FROM Produit p
+JOIN LigneCommande lc ON p.id_produit = lc.id_produit
+GROUP BY p.nom
+ORDER BY total_vendu DESC;
+
+-- Produits en rupture de stock (stock < 5)
+SELECT nom, stock FROM Produit WHERE stock < 5;
