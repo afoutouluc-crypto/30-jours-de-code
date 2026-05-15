@@ -1,0 +1,61 @@
+# Jour 15 - File (Queue) en Python
+# Niveau L2 - Structures de données
+
+from collections import deque
+
+class File:
+    """Implémentation d'une file (FIFO)."""
+
+    def __init__(self):
+        self._elements = deque()
+
+    def enfiler(self, valeur):
+        """Ajoute à la fin de la file."""
+        self._elements.append(valeur)
+
+    def defiler(self):
+        """Retire et retourne l'élément en tête."""
+        if self.est_vide():
+            raise IndexError("File vide")
+        return self._elements.popleft()
+
+    def tete(self):
+        return self._elements[0]
+
+    def est_vide(self):
+        return len(self._elements) == 0
+
+    def taille(self):
+        return len(self._elements)
+
+    def __str__(self):
+        return "tete -> " + " -> ".join(str(e) for e in self._elements) + " <- queue"
+
+
+# Simulation d'une file d'attente (caisse de supermarché)
+class CaisseSuper:
+    def __init__(self, nom):
+        self.nom = nom
+        self.file = File()
+
+    def arriver(self, client):
+        self.file.enfiler(client)
+        print(f"{client} rejoint la {self.nom}")
+
+    def servir(self):
+        if not self.file.est_vide():
+            client = self.file.defiler()
+            print(f"{client} est servi(e) à la {self.nom}")
+        else:
+            print("Aucun client en attente.")
+
+
+if __name__ == "__main__":
+    caisse = CaisseSuper("Caisse 1")
+    for client in ["Alice", "Bob", "Charlie", "Diana"]:
+        caisse.arriver(client)
+
+    print(f"\nFile actuelle : {caisse.file}\n")
+
+    for _ in range(3):
+        caisse.servir()
