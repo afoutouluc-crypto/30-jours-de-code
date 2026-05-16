@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Jour 16 - Allocation dynamique et tableaux en C
+// Niveau L2 - Programmation C
+
+int* creer_tableau(int n) {
+    int* tab = (int*)malloc(n * sizeof(int));
+    if (!tab) { perror("malloc"); exit(1); }
+    return tab;
+}
+
+void remplir_aleatoire(int* tab, int n, int max) {
+    for (int i = 0; i < n; i++)
+        tab[i] = rand() % max + 1;
+}
+
+int somme(int* tab, int n) {
+    int s = 0;
+    for (int i = 0; i < n; i++) s += tab[i];
+    return s;
+}
+
+float moyenne(int* tab, int n) {
+    return (float)somme(tab, n) / n;
+}
+
+int maximum(int* tab, int n) {
+    int max = tab[0];
+    for (int i = 1; i < n; i++) if (tab[i] > max) max = tab[i];
+    return max;
+}
+
+void afficher(int* tab, int n) {
+    for (int i = 0; i < n; i++) printf("%d ", tab[i]);
+    printf("\n");
+}
+
+int main() {
+    int n = 10;
+    int* tab = creer_tableau(n);
+    remplir_aleatoire(tab, n, 100);
+    afficher(tab, n);
+    printf("Somme   : %d\n", somme(tab, n));
+    printf("Moyenne : %.2f\n", moyenne(tab, n));
+    printf("Maximum : %d\n", maximum(tab, n));
+    free(tab);
+    return 0;
+}
