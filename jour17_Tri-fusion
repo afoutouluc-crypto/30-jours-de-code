@@ -1,0 +1,38 @@
+# Jour 17 - Tri fusion (Merge Sort)
+# Niveau L2 - Algorithmique, Diviser pour régner
+
+def fusion(gauche, droite):
+    """Fusionne deux listes triées en une seule."""
+    resultat = []
+    i = j = 0
+    while i < len(gauche) and j < len(droite):
+        if gauche[i] <= droite[j]:
+            resultat.append(gauche[i]); i += 1
+        else:
+            resultat.append(droite[j]); j += 1
+    resultat.extend(gauche[i:])
+    resultat.extend(droite[j:])
+    return resultat
+
+def tri_fusion(liste):
+    """
+    Tri fusion récursif.
+    Complexité : O(n log n) dans tous les cas.
+    """
+    if len(liste) <= 1:
+        return liste
+    milieu = len(liste) // 2
+    gauche = tri_fusion(liste[:milieu])
+    droite = tri_fusion(liste[milieu:])
+    return fusion(gauche, droite)
+
+if __name__ == "__main__":
+    import random
+    liste = random.sample(range(1, 100), 10)
+    print(f"Avant : {liste}")
+    print(f"Après : {tri_fusion(liste)}")
+
+    # Test sur une grande liste
+    grande = random.sample(range(10000), 1000)
+    triee = tri_fusion(grande)
+    print(f"Grande liste triée correctement : {triee == sorted(grande)}")
