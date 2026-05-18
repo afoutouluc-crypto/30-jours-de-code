@@ -1,0 +1,49 @@
+// Jour 18 - Interface et Design Pattern (Strategy)
+// Niveau L2 - POO avancée
+
+interface StrategieTriangle {
+    double calculerAire(double a, double b, double c);
+}
+
+class AireHeron implements StrategieTriangle {
+    @Override
+    public double calculerAire(double a, double b, double c) {
+        double s = (a + b + c) / 2;
+        return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+    }
+}
+
+class AireBase implements StrategieTriangle {
+    // Utilise base * hauteur / 2 (ici c = hauteur)
+    @Override
+    public double calculerAire(double a, double b, double c) {
+        return (a * c) / 2;
+    }
+}
+
+class Triangle {
+    private double a, b, c;
+    private StrategieTriangle strategie;
+
+    public Triangle(double a, double b, double c, StrategieTriangle strategie) {
+        this.a = a; this.b = b; this.c = c;
+        this.strategie = strategie;
+    }
+
+    public double aire() {
+        return strategie.calculerAire(a, b, c);
+    }
+
+    public double perimetre() { return a + b + c; }
+}
+
+public class DesignPatternStrategy {
+    public static void main(String[] args) {
+        Triangle t1 = new Triangle(3, 4, 5, new AireHeron());
+        System.out.printf("Triangle (Héron) - Aire : %.2f, Périmètre : %.2f%n",
+            t1.aire(), t1.perimetre());
+
+        Triangle t2 = new Triangle(6, 0, 4, new AireBase());
+        System.out.printf("Triangle (Base×H/2) - Aire : %.2f%n", t2.aire());
+    }
+}
