@@ -1,0 +1,55 @@
+# Jour 19 - Graphe et parcours BFS/DFS
+# Niveau L2 - Théorie des graphes
+
+from collections import deque
+
+class Graphe:
+    """Graphe non orienté représenté par liste d'adjacence."""
+
+    def __init__(self):
+        self.adjacence = {}
+
+    def ajouter_sommet(self, s):
+        if s not in self.adjacence:
+            self.adjacence[s] = []
+
+    def ajouter_arc(self, s1, s2):
+        self.ajouter_sommet(s1)
+        self.ajouter_sommet(s2)
+        self.adjacence[s1].append(s2)
+        self.adjacence[s2].append(s1)
+
+    def bfs(self, depart):
+        """Parcours en largeur (Breadth-First Search)."""
+        visite = set()
+        file = deque([depart])
+        visite.add(depart)
+        ordre = []
+        while file:
+            sommet = file.popleft()
+            ordre.append(sommet)
+            for voisin in self.adjacence[sommet]:
+                if voisin not in visite:
+                    visite.add(voisin)
+                    file.append(voisin)
+        return ordre
+
+    def dfs(self, depart, visite=None):
+        """Parcours en profondeur (Depth-First Search)."""
+        if visite is None: visite = set()
+        visite.add(depart)
+        ordre = [depart]
+        for voisin in self.adjacence[depart]:
+            if voisin not in visite:
+                ordre.extend(self.dfs(voisin, visite))
+        return ordre
+
+
+if __name__ == "__main__":
+    g = Graphe()
+    arcs = [("A","B"), ("A","C"), ("B","D"), ("C","D"), ("D","E")]
+    for s1, s2 in arcs:
+        g.ajouter_arc(s1, s2)
+
+    print("BFS depuis A :", g.bfs("A"))
+    print("DFS depuis A :", g.dfs("A"))
