@@ -1,0 +1,60 @@
+-- Jour 20 - SQL : Réseau social simplifié
+-- Niveau L2 - SQL (auto-jointure, requêtes complexes)
+
+CREATE TABLE Utilisateur (
+    id_user INTEGER PRIMARY KEY,
+    pseudo VARCHAR(50) UNIQUE,
+    date_inscription DATE
+);
+
+CREATE TABLE Amitie (
+    id_user1 INTEGER,
+    id_user2 INTEGER,
+    date_amitie DATE,
+    PRIMARY KEY (id_user1, id_user2),
+    FOREIGN KEY (id_user1) REFERENCES Utilisateur(id_user),
+    FOREIGN KEY (id_user2) REFERENCES Utilisateur(id_user)
+);
+
+CREATE TABLE Publication (
+    id_pub INTEGER PRIMARY KEY,
+    id_user INTEGER,
+    contenu TEXT,
+    date_pub DATETIME,
+    FOREIGN KEY (id_user) REFERENCES Utilisateur(id_user)
+);
+
+CREATE TABLE Reaction (
+    id_user INTEGER,
+    id_pub INTEGER,
+    type_reaction VARCHAR(10), -- 'like', 'love', 'haha'
+    PRIMARY KEY (id_user, id_pub)
+);
+
+-- Données
+INSERT INTO Utilisateur VALUES (1, 'alice42', '2023-01-15');
+INSERT INTO Utilisateur VALUES (2, 'bob_dev', '2023-02-20');
+INSERT INTO Utilisateur VALUES (3, 'charlie99', '2023-03-10');
+
+INSERT INTO Amitie VALUES (1, 2, '2023-04-01');
+INSERT INTO Amitie VALUES (1, 3, '2023-04-05');
+
+INSERT INTO Publication VALUES (1, 1, 'Mon premier post !', '2024-01-10 09:00:00');
+INSERT INTO Publication VALUES (2, 2, 'Hello world en Python.', '2024-01-11 14:30:00');
+
+INSERT INTO Reaction VALUES (2, 1, 'like');
+INSERT INTO Reaction VALUES (3, 1, 'love');
+INSERT INTO Reaction VALUES (1, 2, 'haha');
+
+-- Nombre d'amis par utilisateur
+SELECT u.pseudo, COUNT(*) AS nb_amis
+FROM Utilisateur u
+JOIN Amitie a ON u.id_user = a.id_user1 OR u.id_user = a.id_user2
+GROUP BY u.pseudo;
+
+-- Publications avec le nombre de réactions
+SELECT u.pseudo, p.contenu, COUNT(r.id_user) AS nb_reactions
+FROM Publication p
+JOIN Utilisateur u ON p.id_user = u.id_user
+LEFT JOIN Reaction r ON p.id_pub = r.id_pub
+GROUP BY p.id_pub, u.pseudo, p.contenu;
