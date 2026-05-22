@@ -1,0 +1,54 @@
+// Jour 22 - Generics en Java
+// Niveau L2 - Java avancé
+
+import java.util.ArrayList;
+import java.util.List;
+
+// Classe générique Paire<T, U>
+class Paire<T, U> {
+    private T premier;
+    private U second;
+
+    public Paire(T premier, U second) {
+        this.premier = premier;
+        this.second = second;
+    }
+
+    public T getPremier() { return premier; }
+    public U getSecond() { return second; }
+
+    @Override
+    public String toString() {
+        return "(" + premier + ", " + second + ")";
+    }
+}
+
+// Méthode générique : trouver le max d'une liste
+class Utilitaires {
+    public static <T extends Comparable<T>> T maximum(List<T> liste) {
+        if (liste.isEmpty()) throw new IllegalArgumentException("Liste vide");
+        T max = liste.get(0);
+        for (T elem : liste)
+            if (elem.compareTo(max) > 0) max = elem;
+        return max;
+    }
+
+    public static <T> void afficher(List<T> liste) {
+        liste.forEach(e -> System.out.print(e + " "));
+        System.out.println();
+    }
+}
+
+public class Generics {
+    public static void main(String[] args) {
+        Paire<String, Integer> p = new Paire<>("Alice", 22);
+        System.out.println("Paire : " + p);
+
+        List<Integer> entiers = List.of(3, 7, 1, 9, 4);
+        System.out.println("Max (entiers) : " + Utilitaires.maximum(entiers));
+
+        List<String> mots = new ArrayList<>(List.of("banane", "apple", "cerise"));
+        System.out.println("Max (strings) : " + Utilitaires.maximum(mots));
+        Utilitaires.afficher(mots);
+    }
+}
