@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+// Jour 23 - Récursivité : Tours de Hanoï
+// Niveau L2 - Algorithmique récursive
+
+int nb_deplacements = 0;
+
+void hanoi(int n, char source, char destination, char auxiliaire) {
+    if (n == 1) {
+        printf("Déplacer disque 1 de %c vers %c\n", source, destination);
+        nb_deplacements++;
+        return;
+    }
+    hanoi(n - 1, source, auxiliaire, destination);
+    printf("Déplacer disque %d de %c vers %c\n", n, source, destination);
+    nb_deplacements++;
+    hanoi(n - 1, auxiliaire, destination, source);
+}
+
+int main() {
+    int n = 3;
+    printf("=== Tours de Hanoï avec %d disques ===\n\n", n);
+    hanoi(n, 'A', 'C', 'B');
+    printf("\nNombre total de déplacements : %d (= 2^%d - 1)\n",
+           nb_deplacements, n);
+    return 0;
+}
