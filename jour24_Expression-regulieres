@@ -1,0 +1,44 @@
+# Jour 24 - Expressions régulières (regex)
+# Niveau L2 - Python / traitement de texte
+ 
+import re
+ 
+def valider_email(email):
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email))
+ 
+def valider_telephone_fr(tel):
+    pattern = r'^(?:\+33|0033|0)[1-9](?:[0-9]{8})$'
+    return bool(re.match(pattern, tel.replace(' ', '')))
+ 
+def extraire_urls(texte):
+    pattern = r'https?://[^\s]+'
+    return re.findall(pattern, texte)
+ 
+def compter_mots(texte):
+    mots = re.findall(r'\b\w+\b', texte)
+    return len(mots)
+ 
+def anonymiser_emails(texte):
+    return re.sub(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
+                  '[EMAIL MASQUÉ]', texte)
+ 
+if __name__ == "__main__":
+    emails = ["test@gmail.com", "invalide@", "user.name+tag@example.co.uk"]
+    for e in emails:
+        print(f"{e:<35} => {'✅ valide' if valider_email(e) else '❌ invalide'}")
+ 
+    print()
+    tels = ["0612345678", "+33612345678", "06 12 34 56 78", "1234"]
+    for t in tels:
+        print(f"{t:<20} => {'✅' if valider_telephone_fr(t) else '❌'}")
+ 
+    print()
+    texte = "Visite https://github.com et https://python.org pour apprendre."
+    print("URLs trouvées :", extraire_urls(texte))
+ 
+    msg = "Contactez alice@example.com ou bob@test.fr pour info."
+    print("Anonymisé :", anonymiser_emails(msg))
+ 
+
+
