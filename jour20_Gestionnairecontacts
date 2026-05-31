@@ -1,0 +1,81 @@
+// Jour 30 - Mini projet final : Gestionnaire de contacts
+// Niveau L2 - Java POO complète
+ 
+import java.util.*;
+import java.util.stream.*;
+ 
+class Contact implements Comparable<Contact> {
+    private String nom;
+    private String prenom;
+    private String email;
+    private String telephone;
+ 
+    public Contact(String nom, String prenom, String email, String telephone) {
+        this.nom = nom; this.prenom = prenom;
+        this.email = email; this.telephone = telephone;
+    }
+ 
+    public String getNom() { return nom; }
+    public String getPrenom() { return prenom; }
+    public String getEmail() { return email; }
+ 
+    @Override
+    public int compareTo(Contact autre) {
+        return this.nom.compareTo(autre.nom);
+    }
+ 
+    @Override
+    public String toString() {
+        return String.format("%-15s %-15s | %-25s | %s", prenom, nom, email, telephone);
+    }
+}
+ 
+class Repertoire {
+    private List<Contact> contacts = new ArrayList<>();
+ 
+    public void ajouter(Contact c) { contacts.add(c); }
+ 
+    public void supprimer(String email) {
+        contacts.removeIf(c -> c.getEmail().equalsIgnoreCase(email));
+    }
+ 
+    public List<Contact> rechercher(String motCle) {
+        String mc = motCle.toLowerCase();
+        return contacts.stream()
+            .filter(c -> c.getNom().toLowerCase().contains(mc)
+                      || c.getPrenom().toLowerCase().contains(mc)
+                      || c.getEmail().toLowerCase().contains(mc))
+            .collect(Collectors.toList());
+    }
+ 
+    public void afficherTous() {
+        if (contacts.isEmpty()) { System.out.println("Aucun contact."); return; }
+        Collections.sort(contacts);
+        System.out.println("=".repeat(70));
+        System.out.printf("%-15s %-15s | %-25s | %s%n", "Prénom", "Nom", "Email", "Téléphone");
+        System.out.println("=".repeat(70));
+        contacts.forEach(System.out::println);
+        System.out.println("=".repeat(70));
+        System.out.println("Total : " + contacts.size() + " contact(s)\n");
+    }
+}
+ 
+public class GestionnaireContacts {
+    public static void main(String[] args) {
+        Repertoire rep = new Repertoire();
+        rep.ajouter(new Contact("Dupont", "Marie", "marie.dupont@mail.com", "0612345678"));
+        rep.ajouter(new Contact("Martin", "Jean", "jean.martin@gmail.com", "0698765432"));
+        rep.ajouter(new Contact("Leroy", "Sophie", "sophie.leroy@pro.fr", "0756781234"));
+        rep.ajouter(new Contact("Bernard", "Lucas", "lucas.b@etudiant.fr", "0623459876"));
+ 
+        System.out.println("📋 Tous les contacts :");
+        rep.afficherTous();
+ 
+        System.out.println("🔍 Recherche 'mar' :");
+        rep.rechercher("mar").forEach(System.out::println);
+ 
+        System.out.println("\n🗑️  Suppression de jean.martin@gmail.com");
+        rep.supprimer("jean.martin@gmail.com");
+        rep.afficherTous();
+    }
+}
