@@ -1,0 +1,23 @@
+# Jour 01 - Conversion de températures
+# Niveau L2 - Python
+ 
+def celsius_to_fahrenheit(c):
+    return (c * 9/5) + 32
+ 
+def fahrenheit_to_celsius(f):
+    return (f - 32) * 5/9
+ 
+def celsius_to_kelvin(c):
+    return c + 273.15
+ 
+def kelvin_to_celsius(k):
+    return k - 273.15
+ 
+if __name__ == "__main__":
+    temps = [0, 20, 37, 100, -40]
+    print("=== Conversion de températures ===")
+    print(f"{'Celsius':>10} {'Fahrenheit':>12} {'Kelvin':>10}")
+    print("-" * 35)
+    for t in temps:
+        print(f"{t:>10}°C {celsius_to_fahrenheit(t):>10.2f}°F {celsius_to_kelvin(t):>8.2f}K")
+ 
