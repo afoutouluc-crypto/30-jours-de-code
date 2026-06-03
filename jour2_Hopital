@@ -1,0 +1,47 @@
+-- Jour 03 - SQL : Gestion d'un hôpital
+-- Niveau L2 - SQL
+ 
+CREATE TABLE Medecin (
+    id_medecin INTEGER PRIMARY KEY,
+    nom VARCHAR(50),
+    specialite VARCHAR(50),
+    telephone VARCHAR(20)
+);
+ 
+CREATE TABLE Patient (
+    id_patient INTEGER PRIMARY KEY,
+    nom VARCHAR(50),
+    date_naissance DATE,
+    groupe_sanguin VARCHAR(5)
+);
+ 
+CREATE TABLE Consultation (
+    id_consultation INTEGER PRIMARY KEY,
+    id_medecin INTEGER,
+    id_patient INTEGER,
+    date_consultation DATE,
+    diagnostic TEXT,
+    FOREIGN KEY (id_medecin) REFERENCES Medecin(id_medecin),
+    FOREIGN KEY (id_patient) REFERENCES Patient(id_patient)
+);
+ 
+INSERT INTO Medecin VALUES (1, 'Dr. Kofi', 'Cardiologie', '0612345678');
+INSERT INTO Medecin VALUES (2, 'Dr. Ama', 'Pédiatrie', '0698765432');
+INSERT INTO Patient VALUES (1, 'Jean Dupont', '1985-03-15', 'A+');
+INSERT INTO Patient VALUES (2, 'Marie Kone', '1992-07-22', 'O-');
+INSERT INTO Consultation VALUES (1, 1, 1, '2024-01-10', 'Hypertension légère');
+INSERT INTO Consultation VALUES (2, 2, 2, '2024-01-12', 'Grippe saisonnière');
+ 
+-- Nombre de consultations par médecin
+SELECT m.nom, m.specialite, COUNT(c.id_consultation) AS nb_consultations
+FROM Medecin m
+LEFT JOIN Consultation c ON m.id_medecin = c.id_medecin
+GROUP BY m.nom, m.specialite;
+ 
+-- Patients consultés plusieurs fois
+SELECT p.nom, COUNT(c.id_consultation) AS nb_visites
+FROM Patient p
+JOIN Consultation c ON p.id_patient = c.id_patient
+GROUP BY p.nom
+HAVING COUNT(c.id_consultation) > 1;
+ 
