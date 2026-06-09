@@ -1,0 +1,37 @@
+# Jour 04 - Nombres premiers (Crible d'Eratosthène)
+# Niveau L2 - Algorithmique
+ 
+def crible_eratosthene(n):
+    """Trouve tous les nombres premiers jusqu'à n."""
+    est_premier = [True] * (n + 1)
+    est_premier[0] = est_premier[1] = False
+    for i in range(2, int(n**0.5) + 1):
+        if est_premier[i]:
+            for j in range(i*i, n+1, i):
+                est_premier[j] = False
+    return [i for i in range(2, n+1) if est_premier[i]]
+ 
+def est_premier(n):
+    if n < 2: return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0: return False
+    return True
+ 
+def decomposition_facteurs(n):
+    """Décomposition en facteurs premiers."""
+    facteurs = []
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            facteurs.append(d)
+            n //= d
+        d += 1
+    if n > 1: facteurs.append(n)
+    return facteurs
+ 
+if __name__ == "__main__":
+    premiers = crible_eratosthene(100)
+    print(f"Premiers jusqu'à 100 ({len(premiers)}) : {premiers}")
+    print(f"360 = {' × '.join(map(str, decomposition_facteurs(360)))}")
+    print(f"97 est premier : {est_premier(97)}")
+ 
