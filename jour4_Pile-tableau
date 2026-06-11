@@ -1,0 +1,43 @@
+// Jour 05 - Pile avec tableau en C
+// Niveau L2 - Structures de données
+ 
+#include <stdio.h>
+#include <stdlib.h>
+ 
+#define MAX 100
+ 
+typedef struct {
+    int donnees[MAX];
+    int sommet;
+} Pile;
+ 
+void init(Pile *p) { p->sommet = -1; }
+int est_vide(Pile *p) { return p->sommet == -1; }
+int est_pleine(Pile *p) { return p->sommet == MAX - 1; }
+ 
+void empiler(Pile *p, int val) {
+    if (est_pleine(p)) { printf("Pile pleine!\n"); return; }
+    p->donnees[++p->sommet] = val;
+}
+ 
+int depiler(Pile *p) {
+    if (est_vide(p)) { printf("Pile vide!\n"); return -1; }
+    return p->donnees[p->sommet--];
+}
+ 
+void afficher(Pile *p) {
+    printf("Pile (sommet -> base): ");
+    for (int i = p->sommet; i >= 0; i--)
+        printf("%d ", p->donnees[i]);
+    printf("\n");
+}
+ 
+int main() {
+    Pile p;
+    init(&p);
+    empiler(&p, 10); empiler(&p, 20); empiler(&p, 30);
+    afficher(&p);
+    printf("Dépilé : %d\n", depiler(&p));
+    afficher(&p);
+    return 0;
+}
